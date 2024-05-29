@@ -1,0 +1,42 @@
+import mmcv
+from mmdet.apis import init_detector, inference_detector, show_result_pyplot
+
+config_file = 'faster_rcnn_voc.py'
+checkpoint_file = 'work_dirs/faster_rcnn/latest.pth'
+model = init_detector(config_file, checkpoint_file, device='cuda:0')
+
+# 测试集中的4张图片
+test_images = [
+    'C:/Users/23969/Desktop/VOCdevkit/VOC2007/JPEGImages/000001.jpg',
+    'C:/Users/23969/Desktop/VOCdevkit/VOC2007/JPEGImages/000002.jpg',
+    'C:/Users/23969/Desktop/VOCdevkit/VOC2007/JPEGImages/000003.jpg',
+    'C:/Users/23969/Desktop/VOCdevkit/VOC2007/JPEGImages/000004.jpg'
+]
+
+for img in test_images:
+    result = inference_detector(model, img)
+    show_result_pyplot(model, img, result, score_thr=0.3, out_file=f'faster_rcnn_{img.split("/")[-1]}')
+
+# 非VOC数据集的3张图片
+external_images = [
+    'path/to/external_image1.jpg',
+    'path/to/external_image2.jpg',
+    'path/to/external_image3.jpg'
+]
+
+for img in external_images:
+    result = inference_detector(model, img)
+    show_result_pyplot(model, img, result, score_thr=0.3, out_file=f'faster_rcnn_{img.split("/")[-1]}')
+
+# YOLO V3模型的可视化
+config_file = 'yolov3_voc.py'
+checkpoint_file = 'work_dirs/yolov3/latest.pth'
+model = init_detector(config_file, checkpoint_file, device='cuda:0')
+
+for img in test_images:
+    result = inference_detector(model, img)
+    show_result_pyplot(model, img, result, score_thr=0.3, out_file=f'yolo_v3_{img.split("/")[-1]}')
+
+for img in external_images:
+    result = inference_detector(model, img)
+    show_result_pyplot(model, img, result, score_thr=0.3, out_file=f'yolo_v3_{img.split("/")[-1]}')
