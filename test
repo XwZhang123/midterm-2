@@ -1,0 +1,33 @@
+from PIL import Image
+import torchvision.transforms as T
+
+# 图像预处理
+def load_image(image_path):
+    image = Image.open(image_path).convert("RGB")
+    transform = T.Compose([
+        T.ToTensor()
+    ])
+    return transform(image).unsqueeze(0).to(device)
+
+# 推理函数
+def run_inference(model, image):
+    with torch.no_grad():
+        outputs = model(image)
+    return outputs
+
+# 外部图像路径
+external_images = [
+    'path/to/external_image1.jpg',
+    'path/to/external_image2.jpg',
+    'path/to/external_image3.jpg'
+]
+
+# 运行推理并保存结果
+results_faster_rcnn = []
+results_yolo_v3 = []
+for img_path in external_images:
+    img = load_image(img_path)
+    result_faster_rcnn = run_inference(model_faster_rcnn, img)
+    results_faster_rcnn.append(result_faster_rcnn)
+    result_yolo_v3 = run_inference(model_yolo_v3, img)
+    results_yolo_v3.append(result_yolo_v3)
